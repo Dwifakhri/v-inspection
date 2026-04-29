@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+:root {
+  --primary: #07bebc;
+  --primary-hover: #06a6a4;
+
+  --base: #010101;
+  --background: #fff;
+  --grey-50: #f2f2f2; /* input border */
+  --grey-100: #fbfbfb; /* input */
+  --grey-200: #f5f6f8;
+  --grey-300: #f8fbfc;
+  --grey-400: #dde0e5;
+  --grey-500: #7d8081;
+  --grey-600: #1c1d1d;
+
+  --disabled-bg: #c7cdce;
+  --disabled-text: #7d8081;
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-base: var(--base);
+
+  --color-disabled: var(--disabled-bg);
+  --color-disabled-text: var(--disabled-text);
+}
+
+html,
+body {
+  background: var(--background);
+  height: 100%;
+}
+
+input {
+  background: var(--grey-100);
+  border: 1px solid var(--grey-50);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+input:disabled {
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
+}
