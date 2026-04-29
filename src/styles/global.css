@@ -6,13 +6,13 @@
 
   --base: #010101;
   --background: #fff;
-  --grey-50: #f2f2f2; /* input border */
-  --grey-100: #fbfbfb; /* input */
-  --grey-200: #f5f6f8;
-  --grey-300: #f8fbfc;
-  --grey-400: #dde0e5;
-  --grey-500: #7d8081;
-  --grey-600: #1c1d1d;
+  --gray-50: #f2f2f2; /* input border */
+  --gray-100: #fbfbfb; /* input */
+  --gray-200: #f5f6f8;
+  --gray-300: #f8fbfc;
+  --gray-400: #b9bcbf;
+  --gray-500: #7d8081;
+  --gray-600: #1c1d1d;
 
   --disabled-bg: #c7cdce;
   --disabled-text: #7d8081;
@@ -21,6 +21,14 @@
 @theme {
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
 
   --color-base: var(--base);
 
@@ -31,12 +39,16 @@
 html,
 body {
   background: var(--background);
-  height: 100%;
+  min-height: 100svh;
+  color: var(--base);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 input {
-  background: var(--grey-100);
-  border: 1px solid var(--grey-50);
+  background: var(--gray-100);
+  border: 1px solid var(--gray-50);
   border-radius: 4px;
   padding: 8px;
 }
