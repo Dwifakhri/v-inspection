@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ChevronRight } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
-
-interface BreadcrumbItem {
-  label: string
-  path: string
-}
+import type { BreadcrumbItem } from '@/types/components/BreadCrumb'
 
 const props = defineProps<{
   items: BreadcrumbItem[]
@@ -23,7 +19,7 @@ const isActive = (path: string) => {
 }
 
 const getClass = (item: BreadcrumbItem, index: number) => {
-  if (isActive(item.path)) {
+  if (item.path && isActive(item.path)) {
     return 'text-sm font-semibold hover:text-primary'
   }
 
@@ -35,7 +31,7 @@ const getClass = (item: BreadcrumbItem, index: number) => {
 }
 
 const handleClick = (item: BreadcrumbItem) => {
-  if (!isActive(item.path)) {
+  if (item.path && !isActive(item.path) && item.clickable) {
     router.push(item.path)
     emit('click', item)
   }
@@ -43,14 +39,14 @@ const handleClick = (item: BreadcrumbItem) => {
 </script>
 
 <template>
-  <nav class="flex" aria-label="Breadcrumb">
-    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+  <nav class="flex mt-1" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse flex-wrap">
       <li v-for="(item, index) in props.items" :key="item.path" class="inline-flex items-center">
         <div class="flex items-center space-x-1.5">
           <ChevronRight v-if="index !== 0" class="w-4 h-4 text-gray-400" />
 
           <button
-            v-if="!isActive(item.path)"
+            v-if="item.path && !isActive(item.path)"
             @click="handleClick(item)"
             :class="getClass(item, index)"
           >

@@ -1,9 +1,5 @@
 <script setup lang="ts">
-interface TabItem {
-  label: string
-  value: string | number
-  disabled?: boolean
-}
+import type { TabItem } from '@/types/components/CustomTabs'
 
 const props = defineProps<{
   items: TabItem[]
@@ -24,17 +20,17 @@ const handleClick = (item: TabItem) => {
 </script>
 
 <template>
-  <ul class="flex flex-wrap text-lg text-center text-gray-400 border-b border-gray-200">
-    <li v-for="item in props.items" :key="item.value" class="me-2">
+  <ul class="flex flex-wrap text-md text-center text-gray-400">
+    <li v-for="item in props.items" :key="item.value" class="me-10">
       <button
         @click="handleClick(item)"
         :disabled="item.disabled"
-        class="inline-block px-4 py-2 cursor-pointer rounded-t-base transition-colors"
+        class="inline-block pt-2 pb-1 cursor-pointer rounded-t-base transition-colors"
         :class="[
           item.disabled
             ? 'text-fg-disabled cursor-not-allowed'
             : isActive(item)
-              ? 'text-primary bg-neutral-secondary-soft'
+              ? 'text-primary bg-neutral-secondary-soft underline underline-offset-7 decoration-4'
               : 'hover:text-primary hover:bg-neutral-secondary-soft',
         ]"
       >

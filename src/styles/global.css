@@ -10,9 +10,10 @@
   --gray-100: #fbfbfb; /* input */
   --gray-200: #f5f6f8;
   --gray-300: #f8fbfc;
-  --gray-400: #b9bcbf;
-  --gray-500: #7d8081;
-  --gray-600: #1c1d1d;
+  --gray-400: #b9c0c8;
+  --gray-500: #b9bcbf;
+  --gray-600: #7d8081;
+  --gray-700: #1c1d1d;
 
   --disabled-bg: #c7cdce;
   --disabled-text: #7d8081;
@@ -56,4 +57,8 @@ input {
 input:disabled {
   background: var(--disabled-bg);
   color: var(--disabled-text);
+}
+
+button {
+  cursor: pointer;
 }
