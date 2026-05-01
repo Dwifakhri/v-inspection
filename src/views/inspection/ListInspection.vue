@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Search, FileDown, Plus } from '@lucide/vue'
+import { Search, FileDown, Plus, Info } from '@lucide/vue'
 import InspectionWrapper from '@/components/template/InspectionWrapper.vue'
 import CustomTabs from '@/components/molecules/CustomTabs.vue'
 import CustomTable from '@/components/organisms/CustomTable.vue'
@@ -26,7 +26,7 @@ const tabs = [
 const columns = [
   { key: 'req_no', label: 'Request No.', sortable: true, width: '120px' },
   { key: 'location', label: 'Location', sortable: true },
-  { key: 'scope_of_work', label: 'Scope of Work', sortable: true, width: '150px' },
+  { key: 'scope_of_work', label: 'Scope of Work', sortable: true, width: '160px' },
   { key: 'type', label: 'Type', sortable: true },
   { key: 'date_submitted', label: 'Date Submitted', sortable: true, width: '140px' },
   { key: 'ecd', label: 'ECD', sortable: true },
@@ -108,7 +108,12 @@ const page = ref(1)
 
     <!-- TABLE -->
     <div class="px-6 py-4">
-      <BaseButton variant="primary" class="ml-auto mb-4 flex gap-1" size="lg">
+      <BaseButton
+        variant="primary"
+        class="ml-auto mb-4 flex gap-1"
+        size="lg"
+        @click="() => $router.push('/create-inspection')"
+      >
         <Plus class="w-4 h-4 text-white" />
         <span class="text-xs">Create Request</span>
       </BaseButton>
@@ -123,9 +128,14 @@ const page = ref(1)
           <BaseBadge :label="row.status" :variant="row.status === 'New' ? 'brand' : 'neutral'" />
         </template>
         <template #scope_of_work="{ row }">
-          <BaseTooltip text="Visual Thread, Visual Body, Full Length Drift">
-            <button class="bg-brand px-4 py-2 rounded-base">{{ row.scope_of_work }}</button>
-          </BaseTooltip>
+          <div class="flex items-center">
+            {{ row.scope_of_work }}
+            <BaseTooltip text="Visual Thread, Visual Body, Full Length Drift">
+              <button class="bg-brand p-2 rounded-base">
+                <Info class="w-4 h-4 text-blue-500" />
+              </button>
+            </BaseTooltip>
+          </div>
         </template>
         <template #related_to="{ row }">
           <p class="text-primary">{{ row.related_to }}</p>

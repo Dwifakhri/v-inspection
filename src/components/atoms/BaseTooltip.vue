@@ -22,13 +22,13 @@ const onLeave = () => (show.value = false)
     <transition name="fade">
       <div
         v-if="show"
-        class="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 text-sm font-medium text-heading bg-white border border-default rounded-base shadow-xs whitespace-nowrap"
+        class="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-500 rounded-base shadow-xs whitespace-nowrap"
       >
         {{ props.text }}
 
         <!-- arrow -->
         <div
-          class="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-default rotate-45"
+          class="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-gray-500 rotate-45"
         />
       </div>
     </transition>

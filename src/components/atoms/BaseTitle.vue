@@ -1,21 +1,23 @@
 <script setup lang="ts">
+type Tag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
+
 const props = defineProps<{
   text?: string
-  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
+  as?: Tag
   variant?: 'default' | 'primary' | 'subtle'
 }>()
 
-const tag = props.as ?? 'h2'
+const tag = (props.as ?? 'h2') as Tag
 
 const baseClass = 'font-semibold tracking-tight'
 
-const variantClass = {
+const variantClass: Record<string, string> = {
   default: 'text-body',
   primary: 'text-primary',
   subtle: 'text-body-subtle',
 }
 
-const sizeClass = {
+const sizeClass: Record<Tag, string> = {
   h1: 'text-3xl',
   h2: 'text-2xl',
   h3: 'text-xl',

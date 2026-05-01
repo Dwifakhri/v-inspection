@@ -9,11 +9,12 @@
   --gray-50: #f2f2f2; /* input border */
   --gray-100: #fbfbfb; /* input */
   --gray-200: #f5f6f8;
-  --gray-300: #f8fbfc;
+  --gray-300: #d8d8d8;
   --gray-400: #b9c0c8;
   --gray-500: #b9bcbf;
   --gray-600: #7d8081;
   --gray-700: #1c1d1d;
+  --gray-800: #d9d9d9;
 
   --disabled-bg: #c7cdce;
   --disabled-text: #7d8081;
@@ -37,7 +38,6 @@
   --color-disabled-text: var(--disabled-text);
 }
 
-html,
 body {
   background: var(--background);
   min-height: 100svh;
@@ -49,9 +49,9 @@ body {
 
 input {
   background: var(--gray-100);
-  border: 1px solid var(--gray-50);
+  border: 1px solid var(--gray-500);
   border-radius: 4px;
-  padding: 8px;
+  padding: 8px 16px;
 }
 
 input:disabled {
@@ -61,4 +61,13 @@ input:disabled {
 
 button {
   cursor: pointer;
+}
+
+.datePicker {
+  background: var(--gray-100);
+  border: 1px solid var(--gray-500);
+  border-radius: 4px;
+  padding: 4px 16px;
+  color: var(--gray-600);
+  height: 38px;
 }

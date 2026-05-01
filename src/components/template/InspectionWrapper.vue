@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TitleBase from '../atoms/TitleBase.vue'
+import BaseTitle from '../atoms/BaseTitle.vue'
 import BreadCrumb from '../molecules/BreadCrumb.vue'
 import type { BreadcrumbItem } from '@/types/components/BreadCrumb'
 
@@ -10,10 +10,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="p-8 bg-gray-300 min-h-svh flex flex-col">
-    <TitleBase v-if="title">
+  <div class="p-8 bg-gray-200 min-h-svh flex flex-col">
+    <BaseTitle v-if="title">
       {{ title }}
-    </TitleBase>
+    </BaseTitle>
     <BreadCrumb v-if="breadcrumbs" :items="breadcrumbs" />
 
     <!-- main content -->

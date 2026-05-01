@@ -22,9 +22,11 @@ const handleInput = (event: Event) => {
     <!-- Label -->
     <label
       v-if="props.label"
+      :id="props.id"
       :for="props.id"
-      class="flex items-center text-sm text-gray-500 font-medium mb-2"
+      class="block mb-1 text-sm text-gray-600"
     >
+      <span v-if="props.required" class="text-red-500 ms-1">*</span>
       {{ props.label }}
     </label>
 
@@ -38,7 +40,7 @@ const handleInput = (event: Event) => {
       @input="handleInput"
       :required="props.required"
       :disabled="props.disabled"
-      class="block w-full border border-gray-300 rounded-sm bg-white px-3 py-2 text-base text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm"
+      class="block w-full border border-gray-500 rounded-sm bg-gray-50 px-3 py-2 text-base text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-gray-500 sm:text-sm"
     />
   </div>
 </template>
