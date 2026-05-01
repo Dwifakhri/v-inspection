@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Pencil, Plus, ChevronDown, Trash } from '@lucide/vue'
+import { ref, computed } from 'vue'
+import { Pencil, Plus, Minus, ChevronDown, Trash } from '@lucide/vue'
 import InspectionWrapper from '@/components/template/InspectionWrapper.vue'
 import CustomDropdown from '@/components/organisms/CustomDropdown.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
@@ -8,12 +8,15 @@ import BaseLabel from '@/components/atoms/BaseLabel.vue'
 import BaseBadge from '@/components/atoms/BaseBadge.vue'
 import BaseToggle from '@/components/atoms/BaseToggle.vue'
 import InputField from '@/components/molecules/InputField.vue'
+import { useMasterDataStore } from '@/store/modules/masterData'
 
 const breadcrumbs = [
   { label: 'Operation', path: '#', clickable: false },
   { label: 'Yard Service', path: '#', clickable: false },
   { label: 'Create Yard Service', path: '/create-inspection' },
 ]
+
+const masterDataStore = useMasterDataStore()
 
 const serviceType = ref(null)
 const scopeOfWork = ref(null)
@@ -28,42 +31,66 @@ const serviceTypeOptions = [
   { label: 'Maintenance', value: 'maintenance' },
   { label: 'On Spot', value: 'on_spot' },
 ]
-const works = [
-  { id: '1', name: 'Visual Thread', selected: true },
-  { id: '2', name: 'Visual Body', selected: true },
-  { id: '3', name: 'Full Length Drift', selected: true },
-  { id: '4', name: 'End Drift', selected: false },
-]
+
+const sowWorkOptions = computed(() => masterDataStore.sowWorks)
+const itemOptions = computed(() => masterDataStore.itemsRaw)
+const customerOptions = computed(() => masterDataStore.customerOptions)
+
+const works = computed(() => {
+  if (!scopeOfWork.value) return []
+  const selected = masterDataStore.sowWorks.find((w) => w._id === scopeOfWork.value)
+  return selected?.fields ?? []
+})
+
 const items = ref([
   {
+    selected: false,
     item: null,
-    qty: null,
+    qty: '',
     lot: '',
     allocation: '',
     owner: '',
     condition: '',
-    availQty: 0,
+    availQty: '',
     qtyRequired: '',
     inspection: false,
+    inspectionQty: '',
   },
 ])
 
+const hasSelected = computed(() => items.value.some((r) => r.selected))
+
+const toggleRowSelected = (index: number) => {
+  const row = items.value[index]
+  if (row) row.selected = !row.selected
+}
+
 const addRow = () => {
   items.value.push({
+    selected: false,
     item: null,
-    qty: null,
+    qty: '',
     lot: '',
     allocation: '',
     owner: '',
     condition: '',
-    availQty: 0,
+    availQty: '',
     qtyRequired: '',
     inspection: false,
+    inspectionQty: '',
   })
 }
 
-const removeRow = (index: number) => {
-  items.value.splice(index, 1)
+const deleteSelected = () => {
+  items.value = items.value.filter((r) => !r.selected)
+}
+
+const incrementQty = (row: (typeof items.value)[number]) => {
+  row.qtyRequired = String(Number(row.qtyRequired || 0) + 1)
+}
+
+const decrementQty = (row: (typeof items.value)[number]) => {
+  row.qtyRequired = String(Math.max(0, Number(row.qtyRequired || 0) - 1))
 }
 </script>
 
@@ -89,7 +116,7 @@ const removeRow = (index: number) => {
               v-model="scopeOfWork"
               label="Scope of Work"
               placeholder="Select a Scope of Work Name"
-              :items="serviceTypeOptions"
+              :items="sowWorkOptions"
               required
               labelKey="subscope_name"
               valueKey="_id"
@@ -107,15 +134,15 @@ const removeRow = (index: number) => {
             </div>
           </div>
           <div>
-            <BaseLabel label="Scope of Work" required for="scopeOfWork" />
+            <BaseLabel label="Scope Included" required for="scopeIndcluded" />
             <div
               class="flex flex-wrap gap-2 p-3 border border-gray-500 rounded-base bg-white rounded-sm"
             >
               <BaseBadge
-                v-for="item in works"
-                :key="item.id"
-                :label="item.name"
-                variant="neutral"
+                v-for="field in works"
+                :key="field._id"
+                :label="field.name"
+                :variant="field.selected ? 'brand' : 'neutral'"
                 size="sm"
               />
             </div>
@@ -126,9 +153,7 @@ const removeRow = (index: number) => {
               v-model="location"
               label="Location"
               placeholder="Select Location"
-              :items="serviceTypeOptions"
-              labelKey="label"
-              valueKey="value"
+              :items="[]"
               required
               class="md:max-w-[200px]"
             />
@@ -147,9 +172,7 @@ const removeRow = (index: number) => {
               v-model="relatedTo"
               label="Related To"
               placeholder="Select Related To"
-              :items="serviceTypeOptions"
-              labelKey="label"
-              valueKey="value"
+              :items="[]"
               required
               class="md:max-w-[200px]"
             />
@@ -188,9 +211,9 @@ const removeRow = (index: number) => {
               v-model="customerName"
               label="Customer Name"
               placeholder="Select Customer Name"
-              :items="serviceTypeOptions"
-              labelKey="label"
-              valueKey="value"
+              :items="customerOptions"
+              labelKey="name"
+              valueKey="customer"
               required
             />
           </div>
@@ -203,13 +226,14 @@ const removeRow = (index: number) => {
 
           <div class="flex gap-2">
             <BaseButton
+              @click="deleteSelected"
               variant="secondary"
               class="flex gap-1 bg-white border-none hover:bg-transparent"
             >
-              <Trash class="w-4 h-4 text-disabled" />
-              <span class="text-sm font-semibold text-disabled">Delete</span>
+              <Trash class="w-4 h-4" :class="hasSelected ? 'text-red-400' : 'text-disabled'" />
+              <span class="text-sm font-semibold" :class="hasSelected ? 'text-red-400' : 'text-disabled'">Delete</span>
             </BaseButton>
-            <BaseButton variant="secondary" class="flex gap-1 bg-white border-none">
+            <BaseButton @click="addRow" variant="secondary" class="flex gap-1 bg-white border-none">
               <Plus class="w-4 h-4 text-primary" />
               <span class="text-sm font-semibold">Add Item</span>
             </BaseButton>
@@ -232,7 +256,11 @@ const removeRow = (index: number) => {
         >
           <!-- Checkbox -->
           <div class="pt-2">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              :checked="row.selected"
+              @change="toggleRowSelected(index)"
+            />
           </div>
 
           <!-- Content -->
@@ -241,18 +269,18 @@ const removeRow = (index: number) => {
             <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
               <CustomDropdown
                 :id="`items${index}`"
-                v-model="serviceType"
+                v-model="row.item"
                 placeholder="Select an item"
-                :items="serviceTypeOptions"
-                labelKey="label"
-                valueKey="value"
+                :items="itemOptions"
+                labelKey="item_desc"
+                valueKey="id_item"
                 class="md:col-span-7"
               />
 
               <InputField
                 :id="`qty${index}`"
                 placeholder="Enter Qty"
-                v-model="DCCode"
+                v-model="row.qty"
                 class="md:col-span-4 mt-4"
               />
               <BaseButton
@@ -268,35 +296,35 @@ const removeRow = (index: number) => {
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 text-sm">
               <InputField
                 :id="`lot${index}`"
-                v-model="DCCode"
+                v-model="row.lot"
                 class="md:col-span-2"
                 label="Lot Selection"
               />
 
               <InputField
                 :id="`allocation${index}`"
-                v-model="DCCode"
+                v-model="row.allocation"
                 class="md:col-span-2"
                 label="Allocation"
               />
 
               <InputField
                 :id="`owner${index}`"
-                v-model="DCCode"
+                v-model="row.owner"
                 class="md:col-span-2"
                 label="Owner"
               />
 
               <InputField
                 :id="`condition${index}`"
-                v-model="DCCode"
+                v-model="row.condition"
                 class="md:col-span-1"
                 label="Condition"
               />
 
               <InputField
                 :id="`availableQty${index}`"
-                v-model="DCCode"
+                v-model="row.availQty"
                 class="md:col-span-1"
                 label="Avail. Qty"
                 disabled
@@ -304,7 +332,7 @@ const removeRow = (index: number) => {
 
               <InputField
                 :id="`qtyRequired${index}`"
-                v-model="DCCode"
+                v-model="row.qtyRequired"
                 type="number"
                 class="md:col-span-1"
                 label="Qty Required"
@@ -312,31 +340,39 @@ const removeRow = (index: number) => {
 
               <!-- Inspection -->
               <div class="flex flex-col md:col-span-2">
-                <BaseLabel label="Inspection Required" for="inspectionRequired" />
+                <BaseLabel :for="`inspectionRequired${index}`" label="Inspection Required" />
                 <div class="flex gap-2 items-start flex-row">
-                  <input id="inspectionRequired" type="checkbox" />
+                  <input
+                    :id="`inspectionRequired${index}`"
+                    v-model="row.inspection"
+                    type="checkbox"
+                  />
                   <span class="text-xs md:hidden">Inspection</span>
-                  <InputField :id="`qtyRequired${index}`" v-model="DCCode" class="md:col-span-1" />
+                  <InputField
+                    :id="`inspectionQty${index}`"
+                    v-model="row.inspectionQty"
+                    class="md:col-span-1"
+                  />
                 </div>
               </div>
 
-              <!-- Actions -->
-              <div class="flex gap-2 md:col-span-1 mt-6">
+              <!-- Qty Controls -->
+              <div class="flex gap-1 md:col-span-1 mt-6 items-center">
                 <BaseButton
-                  @click="removeRow(index)"
+                  @click="decrementQty(row)"
                   variant="secondary"
                   size="iconOnly"
-                  class="p-3 w-[36px] flex-1 md:flex-none bg-gray-200 rounded px-2 h-[36px]"
+                  class="w-[32px] h-[32px] bg-gray-200 border-none"
                 >
-                  -
+                  <Minus class="w-3 h-3" />
                 </BaseButton>
                 <BaseButton
-                  @click="addRow"
+                  @click="incrementQty(row)"
                   variant="primary"
                   size="iconOnly"
-                  class="p-3 w-[36px] flex-1 md:flex-none bg-gray-200 rounded px-2 h-[36px]"
+                  class="w-[32px] h-[32px]"
                 >
-                  +
+                  <Plus class="w-3 h-3" />
                 </BaseButton>
               </div>
             </div>

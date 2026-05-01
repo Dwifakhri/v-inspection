@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { formatDateShort } from '@/utils/date'
 import { Search, FileDown, Plus, Info } from '@lucide/vue'
+import { useMasterDataStore } from '@/store/modules/masterData'
 import InspectionWrapper from '@/components/template/InspectionWrapper.vue'
 import CustomTabs from '@/components/molecules/CustomTabs.vue'
 import CustomTable from '@/components/organisms/CustomTable.vue'
@@ -41,7 +44,7 @@ const itemsTable = [
     location: 'Location A',
     scope_of_work: 'Scope of Work A',
     type: 'Type A',
-    date_submitted: '2023-01-01',
+    date_submitted: 1744393216,
     ecd: 'ECD A',
     related_to: 'Related To A',
     '3rd_party': 3,
@@ -61,7 +64,7 @@ const itemsTable = [
     location: 'Location B',
     scope_of_work: 'Scope of Work B',
     type: 'Type B',
-    date_submitted: '2023-01-02',
+    date_submitted: 1744393216,
     ecd: 'ECD B',
     related_to: 'Related To B',
     '3rd_party': 3,
@@ -86,8 +89,19 @@ const childColumns = [
   { key: 'progress', label: 'Progress', sortable: true },
 ]
 
+const router = useRouter()
+const masterDataStore = useMasterDataStore()
+
+onMounted(() => {
+  console.log('[ListInspection] masterData:', masterDataStore.data)
+})
+
 const activeTab = ref('open')
 const page = ref(1)
+
+const goToDetail = (reqNo: string) => {
+  router.push(`/detail-inspection/${reqNo}`)
+}
 </script>
 
 <template>
@@ -124,6 +138,17 @@ const page = ref(1)
         with-child
         with-data-pagination
       >
+        <template #req_no="{ row }">
+          <button
+            class="text-primary font-semibold hover:underline"
+            @click="goToDetail(row.req_no)"
+          >
+            {{ row.req_no }}
+          </button>
+        </template>
+        <template #date_submitted="{ row }">
+          {{ formatDateShort(row.date_submitted) }}
+        </template>
         <template #status="{ row }">
           <BaseBadge :label="row.status" :variant="row.status === 'New' ? 'brand' : 'neutral'" />
         </template>
