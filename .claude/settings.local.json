@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npx vue-tsc *)",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(grep -E '\\\\.\\(json|config|ts\\)$|^d')"
     ]
   }
 }
