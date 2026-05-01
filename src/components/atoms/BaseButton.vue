@@ -1,6 +1,7 @@
 <script setup lang="ts">
 type Variant = 'primary' | 'secondary' | 'danger'
 type Size = 'sm' | 'md' | 'lg' | 'iconOnly'
+type Type = 'button' | 'submit'
 
 const props = defineProps<{
   variant?: Variant
@@ -8,6 +9,7 @@ const props = defineProps<{
   loading?: boolean
   disabled?: boolean
   class?: string
+  type?: Type
 }>()
 
 const VARIANTS = {
@@ -28,6 +30,7 @@ const SIZES = {
     :disabled="props.disabled || props.loading"
     class="rounded-sm flex items-center justify-center transition-colors"
     :class="[VARIANTS[variant ?? 'primary'], SIZES[props.size ?? 'md'], props.class]"
+    :type="props.type ?? 'submit'"
   >
     <span
       v-if="props.loading"

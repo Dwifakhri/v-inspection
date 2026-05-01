@@ -47,20 +47,27 @@ body {
   padding: 0;
 }
 
-input {
+input,
+textarea {
   background: var(--gray-100);
   border: 1px solid var(--gray-500);
   border-radius: 4px;
   padding: 8px 16px;
 }
 
-input:disabled {
+input:disabled,
+textarea:disabled {
   background: var(--disabled-bg);
   color: var(--disabled-text);
 }
 
 button {
   cursor: pointer;
+}
+
+button:disabled {
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
 }
 
 .datePicker {

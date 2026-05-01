@@ -22,7 +22,7 @@ const handleClick = (item: TabItem) => {
 <template>
   <ul class="flex flex-wrap text-md text-center text-gray-400">
     <li v-for="item in props.items" :key="item.value" class="me-10">
-      <button
+      <div
         @click="handleClick(item)"
         :disabled="item.disabled"
         class="inline-block pt-2 pb-1 cursor-pointer rounded-t-base transition-colors"
@@ -35,7 +35,7 @@ const handleClick = (item: TabItem) => {
         ]"
       >
         {{ item.label }}
-      </button>
+      </div>
     </li>
   </ul>
 </template>
