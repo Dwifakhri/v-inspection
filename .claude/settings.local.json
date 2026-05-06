@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npx vue-tsc *)",
       "Bash(npx eslint *)",
-      "Bash(grep -E '\\\\.\\(json|config|ts\\)$|^d')"
+      "Bash(grep -E '\\\\.\\(json|config|ts\\)$|^d')",
+      "Bash(npx vitest *)"
     ]
   }
 }

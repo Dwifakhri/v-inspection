@@ -11,8 +11,8 @@ import InputField from '@/components/molecules/InputField.vue'
 import { useMasterDataStore } from '@/store/modules/masterData'
 
 const breadcrumbs = [
-  { label: 'Operation', path: '#', clickable: false },
-  { label: 'Yard Service', path: '#', clickable: false },
+  { label: 'Operation', path: '#' },
+  { label: 'Yard Service', path: '#' },
   { label: 'Create Yard Service', path: '/create-inspection' },
 ]
 
@@ -192,13 +192,7 @@ const decrementQty = (row: (typeof items.value)[number]) => {
           <div class="flex justify-between md:flex-row flex-col space-y-5">
             <div>
               <BaseLabel label="Charge to Customer" required for="chargeToCustomer" />
-              <BaseToggle
-                v-model="isChargeToCustomer"
-                showText
-                onLabel="YES"
-                offLabel="NO"
-                class="ml-2 mt-2"
-              />
+              <BaseToggle v-model="isChargeToCustomer" showText class="ml-2 mt-2" />
             </div>
             <div>
               <BaseLabel label="Status" class="font-semibold" for="status" />
@@ -221,17 +215,21 @@ const decrementQty = (row: (typeof items.value)[number]) => {
       </div>
       <div class="rounded-lg mt-2 space-y-4">
         <!-- Header -->
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between md:flex-row flex-col items-start md:items-center gap-2">
           <h2 class="text-sm font-semibold">Order Information</h2>
 
-          <div class="flex gap-2">
+          <div class="flex flex-row gap-2">
             <BaseButton
               @click="deleteSelected"
               variant="secondary"
               class="flex gap-1 bg-white border-none hover:bg-transparent"
             >
               <Trash class="w-4 h-4" :class="hasSelected ? 'text-red-400' : 'text-disabled'" />
-              <span class="text-sm font-semibold" :class="hasSelected ? 'text-red-400' : 'text-disabled'">Delete</span>
+              <span
+                class="text-sm font-semibold"
+                :class="hasSelected ? 'text-red-400' : 'text-disabled'"
+                >Delete</span
+              >
             </BaseButton>
             <BaseButton @click="addRow" variant="secondary" class="flex gap-1 bg-white border-none">
               <Plus class="w-4 h-4 text-primary" />
@@ -256,11 +254,7 @@ const decrementQty = (row: (typeof items.value)[number]) => {
         >
           <!-- Checkbox -->
           <div class="pt-2">
-            <input
-              type="checkbox"
-              :checked="row.selected"
-              @change="toggleRowSelected(index)"
-            />
+            <input type="checkbox" :checked="row.selected" @change="toggleRowSelected(index)" />
           </div>
 
           <!-- Content -->

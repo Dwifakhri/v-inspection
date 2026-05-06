@@ -6,9 +6,12 @@ import InspectionWrapper from '@/components/template/InspectionWrapper.vue'
 const route = useRoute()
 
 const breadcrumbs = computed(() => [
-  { label: 'Quality & HSE', path: '#', clickable: false },
-  { label: 'Inspection', path: '/', clickable: true },
-  { label: `${route.meta.title} - ${route.params.id}`, path: '#', clickable: false },
+  { label: 'Quality & HSE', path: '#' },
+  { label: 'Inspection', path: '/' },
+  {
+    label: `${route.meta.title} - ${route.params.id}`,
+    path: `/detail-inspection/${route.params.id}`,
+  },
 ])
 </script>
 <template>

@@ -14,8 +14,8 @@ import TableInfo from '@/components/molecules/TableInfo.vue'
 import CustomPagination from '@/components/molecules/CustomPagination.vue'
 
 const breadcrumbs = [
-  { label: 'Quality & HSE', path: '#', clickable: false },
-  { label: 'Inspection', path: '#', clickable: false },
+  { label: 'Quality & HSE', path: '#' },
+  { label: 'Inspection', path: '#' },
   { label: 'Inspection Record', path: '/' },
 ]
 
